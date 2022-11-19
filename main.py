@@ -17,23 +17,25 @@ class WebApplication(Application):
     def __init__(self, handlers: list = None):
         root_path = dirname(realpath(__file__))
         settings = {
-            "debug": conf.app_debug
+            "debug": conf.app_debug,
             "default_handler_class": NotFoundHandler,
             "template_path": path_join(root_path, "resources/views"),
-            "static_path": path_join(root_path, "resources/static/skin"),
+            "static_path": path_join(root_path, "resources/static"),
             "cookie_secret": CryptHelper.parse_key(conf)
         }
         super(WebApplication, self).__init__(handlers=handlers, **settings)
 
 
 def make_app() -> WebApplication:
+    root_path = dirname(realpath(__file__))
     app = WebApplication(
         [
             (r"/sign/in", SigninHandler),
             (r"/crypt", CryptHandler)
         ]
     )
-    # locale.set_default_locale()
+    locale.set_default_locale("zh")
+    locale.load_translations(path_join(root_path, "resources/lang"))
 
     return app
 
