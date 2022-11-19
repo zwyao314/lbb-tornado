@@ -13,12 +13,12 @@ class BlockCipher(object):
     def get_name(self):
         return self.__name
 
-    def set_key(self, key: bytes):
+    def set_key(self, key: str):
         self.__key = key
 
         return self
 
-    def get_key(self) -> bytes:
+    def get_key(self) -> str:
         return self.__key
 
     def set_mode(self, mode: str):
@@ -32,7 +32,8 @@ class BlockCipher(object):
     def __new_cipher(self):
         match self.__name:
             case "aes":
-                key = self.__key[:AES.key_size[-1]]
+                b_key = self.__key.encode()
+                b_key = b_key[:AES.key_size[-1]]
                 match self.__mode:
                     case "ecb":
                         mode = AES.MODE_ECB
@@ -59,49 +60,51 @@ class BlockCipher(object):
                     case _:
                         mode = AES.MODE_CBC
 
-                cipher = AES.new(key, mode)
+                cipher = AES.new(b_key, mode)
             case "des":
-                key = self.__key[:DES.key_size]
+                b_key = self.__key.encode()
+                b_key = b_key[:DES.key_size]
                 match self.__mode:
                     case "ecb":
-                        mode = AES.MODE_ECB
+                        mode = DES.MODE_ECB
                     case "cbc":
-                        mode = AES.MODE_CBC
+                        mode = DES.MODE_CBC
                     case "cfb":
-                        mode = AES.MODE_CFB
+                        mode = DES.MODE_CFB
                     case "ofb":
-                        mode = AES.MODE_OFB
+                        mode = DES.MODE_OFB
                     case "ctr":
-                        mode = AES.MODE_CTR
+                        mode = DES.MODE_CTR
                     case "openpgp":
-                        mode = AES.MODE_OPENPGP
+                        mode = DES.MODE_OPENPGP
                     case "eax":
-                        mode = AES.MODE_EAX
+                        mode = DES.MODE_EAX
                     case _:
-                        mode = AES.MODE_CBC
+                        mode = DES.MODE_CBC
 
-                cipher = DES.new(key, mode)
+                cipher = DES.new(b_key, mode)
             case "des3":
-                key = self.__key[:DES3.key_size[-1]]
+                b_key = self.__key.encode()
+                b_key = b_key[:DES.key_size[-1]]
                 match self.__mode:
                     case "ecb":
-                        mode = AES.MODE_ECB
+                        mode = DES3.MODE_ECB
                     case "cbc":
-                        mode = AES.MODE_CBC
+                        mode = DES3.MODE_CBC
                     case "cfb":
-                        mode = AES.MODE_CFB
+                        mode = DES3.MODE_CFB
                     case "ofb":
-                        mode = AES.MODE_OFB
+                        mode = DES3.MODE_OFB
                     case "ctr":
-                        mode = AES.MODE_CTR
+                        mode = DES3.MODE_CTR
                     case "openpgp":
-                        mode = AES.MODE_OPENPGP
+                        mode = DES3.MODE_OPENPGP
                     case "eax":
-                        mode = AES.MODE_EAX
+                        mode = DES3.MODE_EAX
                     case _:
-                        mode = AES.MODE_CBC
+                        mode = DES3.MODE_CBC
 
-                cipher = DES3.new(key, mode)
+                cipher = DES3.new(b_key, mode)
 
         return cipher
 
@@ -131,7 +134,6 @@ class BlockCipher(object):
     def decrypt(self, crypted_text: bytes) -> bytes:
         decipher = self.__get_decipher()
         text = decipher.decrypt(crypted_text)
-        print(text)
         text = unpad(text, decipher.block_size)
 
         return text

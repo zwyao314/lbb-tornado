@@ -13,23 +13,24 @@ class CryptHelper(object):
         self.__key = CryptHelper.parse_key(conf)
 
     @staticmethod
-    def generate_key() -> bytes:
+    def generate_key() -> str:
         b_key = randbytes(48)
         b_key = base64.b64encode(b_key)
-        b_key = "base64:".encode() + b_key
+        key = b_key.decode()
+        key = "base64:" + key
 
-        return b_key
+        return key
 
     @staticmethod
-    def parse_key(config: conf) -> bytes:
+    def parse_key(config: conf) -> str:
         key = conf.app_key
-        b_key = key.encode()
         prefix = "base64:"
         if key.startswith(prefix):
             key = key.replace(prefix, '')
             b_key = base64.b64decode(key)
+            key = b_key.decode(encoding=conf.byte_encoding)
 
-        return b_key
+        return key
 
     def __new_cipher(self):
         cipher = BlockCipher(self.__name)
@@ -46,14 +47,19 @@ class CryptHelper(object):
 
         return cipher
 
-    def encrypt(self, text: bytes) -> bytes:
+    def encrypt(self, text: str) -> str:
         cipher = self.__get_cipher()
-        crypted_text = cipher.encrypt(text)
+        text = text.encode()
+        b_crypted_text = cipher.encrypt(text)
+        b_crypted_text = base64.b64encode(b_crypted_text)
+        crypted_text = b_crypted_text.decode()
 
         return crypted_text
 
-    def decrypt(self, crypted_text: bytes) -> bytes:
+    def decrypt(self, crypted_text: str) -> str:
         cipher = self.__get_cipher()
-        text = cipher.decrypt(crypted_text)
+        b_crypted_text = base64.b64decode(crypted_text)
+        b_text = cipher.decrypt(b_crypted_text)
+        text = b_text.decode(encoding=conf.byte_encoding)
 
         return text

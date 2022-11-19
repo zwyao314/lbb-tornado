@@ -1,26 +1,39 @@
 import asyncio
 import logging
+from app.http.controllers.crypt import Crypt as CryptHandler
+from app.http.controllers.not_found import NotFound as NotFoundHandler
 from app.http.controllers.signin import Signin as SigninHandler
-from app.http.controllers.signout import Signout as SignoutHandler
-from config import cfg
+from config import conf
+from app.helper.crypt_helper import CryptHelper
+from os.path import dirname, join as path_join, realpath
+from tornado import locale
 from tornado.options import define, options
 from tornado.web import Application, HTTPServer
-
-conf = cfg.CONF
 
 define("port", default=conf.http_server.port, type=int, help="Running the http server on the port")
 
 
 class WebApplication(Application):
     def __init__(self, handlers: list = None):
-        super(WebApplication, self).__init__(handlers=handlers)
+        root_path = dirname(realpath(__file__))
+        settings = {
+            "debug": conf.app_debug
+            "default_handler_class": NotFoundHandler,
+            "template_path": path_join(root_path, "resources/views"),
+            "static_path": path_join(root_path, "resources/static/skin"),
+            "cookie_secret": CryptHelper.parse_key(conf)
+        }
+        super(WebApplication, self).__init__(handlers=handlers, **settings)
 
 
 def make_app() -> WebApplication:
-    app = WebApplication([
-        (r"/sign/in", SigninHandler),
-        (r"/sign/out", SignoutHandler)
-    ])
+    app = WebApplication(
+        [
+            (r"/sign/in", SigninHandler),
+            (r"/crypt", CryptHandler)
+        ]
+    )
+    # locale.set_default_locale()
 
     return app
 
