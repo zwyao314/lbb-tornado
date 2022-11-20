@@ -1,0 +1,12 @@
+{% extends "../layouts/default.html" %}
+
+{% block header %}
+  {% include "../layouts/header.html" %}
+{% end %}
+{% block content %}
+  {{ _("Sign in") }}
+  <form name="signin.post" method="post" action="{{ reverse_url('signin.post') }}">
+    {% module xsrf_form_html() %}
+    <input type="submit" value="提交登陆">
+  </form>
+{% end %}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{ locale.code }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ _(title) }}</title>
+</head>
+<body>
+<div class="container">
+    {% block header %}
+    {% end %}
+    <main class="main">
+        {% block content %}
+        {% end %}
+    </main>
+    {% block footer %}
+    {% end %}
+</div>
+</body>
+</html>

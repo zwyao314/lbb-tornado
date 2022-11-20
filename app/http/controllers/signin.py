@@ -1,9 +1,13 @@
-from tornado.web import RequestHandler
+from app.http.controllers.base_handler import BaseHandler
 
 
-class Signin(RequestHandler):
+class Signin(BaseHandler):
     def get(self):
-        pass
+        data = {
+            "title": "Sign in",
+            "page_title": "Sign in"
+        }
+        return self.render("default/default/user/signin.html", **data)
 
     def post(self):
-        pass
+        print("Signin Post")
