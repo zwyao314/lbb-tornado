@@ -4,13 +4,15 @@ from app.models.customer.customer import Customer
 
 class Signin(BaseHandler):
     def get(self):
-        # one = Customer.select(*[
+        # fields = [
         #     "id",
         #     "username",
-        #     "password"
-        # ]).where("id" == 1).get()
-        one = Customer.get_by_id(*[1])
-        print(one)
+        #     "password_hash"
+        # ]
+        # ones = Customer.select(*fields).where(Customer._meta.primary_key == 10000)
+        one = Customer.get_by_id(10000)
+        print(one.created_at)
+        print(one.updated_at)
         data = {
             "title": "Sign in",
             "page_title": "Sign in"
