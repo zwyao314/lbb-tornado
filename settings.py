@@ -1,8 +1,8 @@
 from app.http.middleware import (
-    locale
+    locale_middleware
 )
 
 
 middlewares = [
-    locale.Locale()
+    locale_middleware.LocaleMiddleware()
 ]

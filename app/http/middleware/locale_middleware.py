@@ -6,7 +6,7 @@ from tornado.web import RequestHandler
 
 
 # Locale middleware
-class Locale(BaseMiddleware):
+class LocaleMiddleware(BaseMiddleware):
     def process_request(self, handler: RequestHandler):
         request = handler.request
         language = request.headers.get("Accept-Language")

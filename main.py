@@ -58,5 +58,5 @@ if __name__ == "__main__":
     except CancelledError as e:
         pass
     except BaseException as e:
-        print(type(e))
+        print(f"Exception: {e}")
         Log.to_error_logger().exception(e)
