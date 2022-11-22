@@ -1,6 +1,5 @@
-from app.http.middleware.locale import Locale as LocaleMiddleware
+import settings
 from asyncio.futures import Future
-from os.path import join as path_join
 from typing import Any, Awaitable, Optional, Union
 from tornado.web import RequestHandler
 
@@ -13,9 +12,7 @@ class BaseHandler(RequestHandler):
         super(BaseHandler, self).initialize(**kwargs)
 
     def _get_default_middlewares(self):
-        default_middlewares = [
-            LocaleMiddleware()
-        ]
+        default_middlewares = settings.middlewares
 
         return default_middlewares
 
@@ -25,10 +22,8 @@ class BaseHandler(RequestHandler):
 
         return super(BaseHandler, self).prepare()
 
-    def finish(self, chunk: Optional[Union[str, bytes, dict]] = None) -> "Future[None]":
-        result = super(BaseHandler, self).finish(chunk)
+    def on_finish(self) -> None:
+        super(BaseHandler, self).on_finish()
 
         for middleware in self.middlewares:
             middleware.process_response(self)
-
-        return result

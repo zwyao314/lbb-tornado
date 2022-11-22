@@ -1,9 +1,10 @@
 import asyncio
-import logging
+from asyncio.exceptions import CancelledError
 from app.helper.crypt_helper import CryptHelper
 from app.http.controllers.not_found import NotFound as NotFoundHandler
 from config import conf
 from constant import ROOT_PATH
+from lib.pymy.logging.log import Log
 from os.path import join as path_join
 from routes.web import routes as web_routes
 from tornado.options import define, options
@@ -52,6 +53,10 @@ def fork_main():
 if __name__ == "__main__":
     try:
         asyncio.run(main())
+    except KeyboardInterrupt as e:
+        pass
+    except CancelledError as e:
+        pass
     except BaseException as e:
-        logging.exception(e)
-        print(f"Exception: {e}")
+        print(type(e))
+        Log.to_error_logger().exception(e)

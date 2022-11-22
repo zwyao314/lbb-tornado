@@ -9,8 +9,8 @@ class Signout(BaseHandler):
         # text = crypt_helper.decrypt(crypted_text)
         # print(text)
         data = {
-            "title": "Sign in",
-            "page_title": "Sign in"
+            "title": "Sign out",
+            "page_title": "Sign out"
         }
 
-        return self.render("customer/signin.html", **data)
+        return self.render("customer/signout.html", **data)
