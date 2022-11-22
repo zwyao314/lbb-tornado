@@ -1,5 +1,5 @@
 from app.models.base_model import BaseModel
-from peewee import BigIntegerField, CharField, DateTimeField, IntegerField
+from peewee import BigAutoField, BigIntegerField, CharField, DateTimeField, IntegerField
 
 
 class Customer(BaseModel):

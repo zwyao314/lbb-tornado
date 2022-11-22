@@ -26,14 +26,16 @@ conf.register_opts(http_server_opts, group=http_server_group)
 
 mysql_group = cfg.OptGroup(name="mysql", help="MySQL config")
 mysql_opts = [
-    cfg.StrOpt(name="url", default="mysql://root:password@host:port/database?charset=utf8"),
+    cfg.StrOpt(name="url", default="mysql://root:password@host:port/database?charset=utf8mb4"),
     cfg.StrOpt(name="host", default="127.0.0.1"),
     cfg.IntOpt(name="port", default=3306),
     cfg.StrOpt(name="database", default=None),
     cfg.StrOpt(name="username", default="root"),
     cfg.StrOpt(name="password", default=None),
     cfg.StrOpt(name="unix_socket", default=None),
-    cfg.StrOpt(name="prefix", default="tb_")
+    cfg.StrOpt(name="prefix", default="tb_"),
+    cfg.StrOpt(name="charset", default="utf8mb4"),
+    cfg.IntOpt(name="max_connections", default=2)
 ]
 conf.register_group(mysql_group)
 conf.register_opts(mysql_opts, mysql_group)

@@ -14,11 +14,12 @@ define("port", default=conf.http_server.port, type=int, help="Running the http s
 
 class WebApplication(Application):
     def __init__(self, handlers: list = None):
+        skin_path = "default/default"
         settings = {
             "debug": conf.app_debug,
             "default_handler_class": NotFoundHandler,
-            "template_path": path_join(ROOT_PATH, "resources/views"),
-            "static_path": path_join(ROOT_PATH, "resources/static"),
+            "template_path": path_join(ROOT_PATH, "resources", "views", "skin", skin_path),
+            "static_path": path_join(ROOT_PATH, "resources", "static", "skin", skin_path),
             "cookie_secret": CryptHelper.parse_key(conf),
             "xsrf_cookies": True
         }
