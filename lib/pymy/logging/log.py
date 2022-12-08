@@ -16,7 +16,12 @@ class Log(object):
             )
             handler.setFormatter(
                 logging.Formatter(
-                    fmt="Thread ID: %(thread)d\nCreated at: %(created)f\n%(levelname)s: %(message)s in %(pathname)s, line %(lineno)d\nFunction: %(funcName)s"
+                    fmt='''
+Thread ID: %(thread)d
+Created at: %(created)f
+%(levelname)s: %(message)s in %(pathname)s, line %(lineno)d
+Function: %(funcName)s
+                    '''
                 )
             )
             logger.addHandler(handler)

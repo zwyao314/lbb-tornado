@@ -1,5 +1,5 @@
-from app.http.middleware.base_middleware import BaseMiddleware
 from constant import ROOT_PATH
+from lib.pymy.http.middleware.base_middleware import BaseMiddleware
 from os.path import dirname, join as path_join, realpath
 from tornado import locale
 from tornado.web import RequestHandler
@@ -14,3 +14,6 @@ class LocaleMiddleware(BaseMiddleware):
         lang = langPart[0][:2]
         locale.set_default_locale(lang)
         locale.load_translations(path_join(ROOT_PATH, "resources", "lang", lang))
+
+    def process_response(self, handler: RequestHandler):
+        pass

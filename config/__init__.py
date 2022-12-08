@@ -38,7 +38,7 @@ mysql_opts = [
     cfg.IntOpt(name="max_connections", default=2)
 ]
 conf.register_group(mysql_group)
-conf.register_opts(mysql_opts, mysql_group)
+conf.register_opts(mysql_opts, group=mysql_group)
 
 redis_group = cfg.OptGroup(name="redis", help="Redis config")
 redis_opts = [
@@ -47,12 +47,31 @@ redis_opts = [
     cfg.IntOpt(name="port", default=6379)
 ]
 conf.register_group(redis_group)
-conf.register_opts(redis_opts, redis_group)
+conf.register_opts(redis_opts, group=redis_group)
 
 rabbitmq_group = cfg.OptGroup(name="rabbitmq", help="Rabbitmq config")
 rabbitmq_opts = [
     cfg.StrOpt(name="url", default="amqp://user:password@host:port//vhost")
 ]
+conf.register_group(rabbitmq_group)
+conf.register_opts(rabbitmq_opts, group=rabbitmq_group)
+
+session_group = cfg.OptGroup(name="session", help="Session config")
+session_opts = [
+    cfg.StrOpt(name="driver", default="file"),
+    cfg.BoolOpt(name="cache_driver", default=True),
+    cfg.StrOpt(name="host", default="127.0.0.1"),
+    cfg.IntOpt(name="port", default=None),
+    cfg.StrOpt(name="sid_name", default="tornado_sess"),
+    cfg.IntOpt(name="lifetime", default=1800),
+    cfg.StrOpt(name="prefix", default="default_"),
+
+    # Redis config:
+    cfg.IntOpt(name="db", default=1),
+    # cfg.IntOpt(name="max_connections", default=10)
+]
+conf.register_group(session_group)
+conf.register_opts(session_opts, group=session_group)
 
 env = environ.get(conf.app_env, default="development")
 config_file = path_join(dirname(realpath(__file__)), env+".conf")

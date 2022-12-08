@@ -1,17 +1,16 @@
 import base64
-from hashlib import scrypt, sha3_256
-from random import randbytes
+import hashlib
 
 
 class ScryptShaHasher(object):
     # Crypt password
-    def make(self, text: bytes, key: bytes) -> bytes:
-        hashed_text = self.__crypt_text(text)
-        key = key[:32]
-        b_hashed_text = scrypt(
-            password=hashed_text,
-            salt=key,
-            n=len(key),
+    def make(self, text: bytes, salt: bytes) -> bytes:
+        b_hashed_text = self.__crypt_text(text)
+        salt = salt[:32]
+        b_hashed_text = hashlib.scrypt(
+            password=b_hashed_text,
+            salt=salt,
+            n=len(salt),
             r=2,
             p=3
         )
@@ -20,12 +19,11 @@ class ScryptShaHasher(object):
         return b_hashed_text
 
     # verify password
-    def check(self, text: bytes, hashed_text: bytes, key: bytes) -> bool:
-        return hashed_text == self.make(text, key)
+    def check(self, text: bytes, hashed_text: bytes, salt: bytes) -> bool:
+        return hashed_text == self.make(text, salt=salt)
 
     # Sha3_256 crypt text
     def __crypt_text(self, text: bytes) -> bytes:
-        sha256 = sha3_256()
-        sha256.update(text)
+        sha256 = hashlib.sha3_256(text)
 
         return sha256.hexdigest().encode()

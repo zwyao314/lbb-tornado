@@ -1,5 +1,5 @@
 from config import conf
-from peewee import Model, MySQLDatabase
+from peewee import Model
 from playhouse.pool import PooledMySQLDatabase
 db_params = {
     "host": conf.mysql.host,
@@ -15,10 +15,12 @@ db = PooledMySQLDatabase(
     database=conf.mysql.database,
     **db_params
 )
+PooledMySQLDatabase.field_types["JSON"] = "JSON"
 
 
 # Base model
 class BaseModel(Model):
     class Meta:
         database = db
+        legacy_table_names = False
         table_prefix = conf.mysql.prefix
